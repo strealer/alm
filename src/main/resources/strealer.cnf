@@ -1,0 +1,11 @@
+local_host=http://localhost
+local_port=80
+backend_host=
+backend_port=80
+device_id=1234
+remote_api_url=
+remote_api_key=
+test_file_path=conf/mediacache-heartbeat-check.txt
+heartbeat_interval=15
+varnish_check_interval=10
+varnish_restart_try_max_count=3
