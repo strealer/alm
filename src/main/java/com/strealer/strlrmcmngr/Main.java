@@ -75,7 +75,7 @@ public class Main {
         }
     }
     
-    private static String createConfigFile(String targetPath, String defaultPath) throws IOException {
+    /*private static String createConfigFile(String targetPath, String defaultPath) throws IOException {
         try {
             Path configFile = Paths.get(targetPath);
             // Create parent directories if they don't exist
@@ -88,7 +88,7 @@ public class Main {
             // If file creation/filling fails, fill config with fallback path
             return System.getProperty("user.dir") + defaultPath; // Return the fallback path
         }
-    }
+    }*/
 
     private static Configuration loadConfiguration(String filePath) throws IOException {
         Properties properties = new Properties();
@@ -217,7 +217,7 @@ public class Main {
             String responseJson = convertToJson(response);
 
             //Send response to remote API URL
-            /*postResponse(remoteApiUrl, remoteApiKey, responseJson);*/
+            postResponse(remoteApiUrl, remoteApiKey, responseJson);
 
             iterationCount++;
             MemoryMonitor.print();
