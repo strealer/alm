@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     // Define configuration file path
     private static String CONFIG_FILE_PATH = "/etc/default/strealer.cnf";
-    private static String CONFIG_FILE_DEFAULT_PATH = "\\target\\strlrmcmngr.cnf";
+    private static String CONFIG_FILE_DEFAULT_PATH = "/target/strlrmcmngr.cnf";
     // Define error container
     private static List<Integer> errorCodeSet = new ArrayList<>();
     // Declare Configuration object as global
