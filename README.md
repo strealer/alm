@@ -5,7 +5,7 @@ Autonomous Local Manager package
 # ALM Project
 
 ## Introduction
-This is the ALM project, a comprehensive solution for [add project description here].
+This is the ALM project, a comprehensive solution for managing local proxy.
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
