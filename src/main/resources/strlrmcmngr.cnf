@@ -7,5 +7,5 @@ remote_api_url=
 remote_api_key=
 test_file_path=conf/mediacache-heartbeat-check.txt
 heartbeat_interval=15
-varnish_check_interval=10
-varnish_restart_try_max_count=3
+nginx_check_interval=10
+nginx_restart_try_max_count=3
