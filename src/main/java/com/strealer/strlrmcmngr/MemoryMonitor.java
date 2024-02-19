@@ -12,12 +12,13 @@ public class MemoryMonitor {
 
         // Get the heap memory usage
         MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
-        System.out.println("----------------------");
-        System.out.println("Heap Memory Usage:");
-        System.out.println("  Initial: " + bytesToMegabytes(heapMemoryUsage.getInit()) + " MB");
-        System.out.println("  Used: " + bytesToMegabytes(heapMemoryUsage.getUsed()) + " MB");
-        System.out.println("  Committed: " + bytesToMegabytes(heapMemoryUsage.getCommitted()) + " MB");
-        System.out.println("  Max: " + bytesToMegabytes(heapMemoryUsage.getMax()) + " MB");
+        // System.out.println("----------------------");
+        // System.out.println("Heap Memory Usage:");
+        // System.out.println("  Initial: " + bytesToMegabytes(heapMemoryUsage.getInit()) + " MB");
+        // System.out.println("  Used: " + bytesToMegabytes(heapMemoryUsage.getUsed()) + " MB");
+        // System.out.println("  Committed: " + bytesToMegabytes(heapMemoryUsage.getCommitted()) + " MB");
+        System.out.println("Mem Committed: " + bytesToMegabytes(heapMemoryUsage.getCommitted()) + " MB\r");
+        // System.out.println("  Max: " + bytesToMegabytes(heapMemoryUsage.getMax()) + " MB");
 
         // Get the non-heap memory usage
         /*MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();
