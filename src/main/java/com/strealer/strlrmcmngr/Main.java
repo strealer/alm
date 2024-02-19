@@ -50,6 +50,8 @@ public class Main {
             config = loadConfiguration(CONFIG_FILE_PATH);
             nginxCheckInterval = config.getNginxCheckInterval();
             heartbeatInterval = config.getHeartbeatInterval();
+            System.out.println("nginxCheckInterval: " + nginxCheckInterval);
+            System.out.println("heartbeatInterval: " + heartbeatInterval);
 
             executorService = Executors.newScheduledThreadPool(2);
             startTimers(nginxService);
