@@ -6,7 +6,8 @@ import java.io.InputStreamReader;
 
 public class NginxStatusChecker {
     public static boolean isNginxRunning() throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder("sudo", "systemctl", "status", "nginx");
+        // ProcessBuilder processBuilder = new ProcessBuilder("sudo", "systemctl", "status", "nginx");
+        ProcessBuilder processBuilder = new ProcessBuilder("systemctl", "status", "nginx");
         Process process = null;
         try {
             process = processBuilder.start();

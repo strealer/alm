@@ -3,7 +3,8 @@ package com.strealer.strlrmcmngr;
 import java.io.IOException;
 
 public class NginxService {
-    private static final String SYSTEMCTL_COMMAND = "sudo systemctl";
+    // private static final String SYSTEMCTL_COMMAND = "sudo systemctl";
+    private static final String SYSTEMCTL_COMMAND = "systemctl";
     private static final String VAR_NGINX = "nginx";
 
     public static void startNginx() throws IOException, InterruptedException {
