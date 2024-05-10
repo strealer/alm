@@ -1,0 +1,5 @@
+docker/
+puppet/
+README.md
+.git
+.gitignore
