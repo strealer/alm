@@ -1,15 +1,5 @@
 # Specify Ubuntu as the base image
-FROM ubuntu:latest
-
-# Install Nginx
-RUN apt-get update -y && apt-get upgrade -y \
-        gawk \
-        coreutils \
-        grep    \
-        sed \
-        nginx \
-        openjdk-17-jdk \
-        maven
+FROM strealer/alm-dependencies
 
 WORKDIR /alm
 
