@@ -46,7 +46,7 @@ java -jar target/alm-1.0-SNAPSHOT.jar
 Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated snapshot JAR file in the target directory.
 
 
-## Usage Instructions
+## Docker Instructions
 
 ### Pulling the Image
 ```shell
