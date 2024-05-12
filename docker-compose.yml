@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  alm:
+    image: strealer/alm-app
+    ports:
+      - "8080:80"
+    container_name: alm
