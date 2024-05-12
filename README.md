@@ -48,14 +48,14 @@ Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated 
 
 ## Docker Instructions
 
-### Pulling the Image
+### Build the Image (Use it if you know what you're doing)
 ```shell
-docker pull strealer/alm-app
+docker build -t strealer/alm-app .
 ```
 
 ### Running the Image
 ```shell
-docker run -d -p 8080:80 --name alm strealer/alm-app
+docker-compose up -d
 ```
 This command starts a container named "alm" based on the "strealer/alm-app" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
 
