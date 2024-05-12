@@ -44,3 +44,50 @@ After building the project, you can run the application using the following comm
 java -jar target/alm-1.0-SNAPSHOT.jar
 ```
 Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated snapshot JAR file in the target directory.
+
+
+## Usage Instructions
+
+### Pulling the Image
+```shell
+docker pull strealer/alm-app
+```
+
+### Running the Image
+```shell
+docker run -d -p 8080:80 --name alm strealer/alm-app
+```
+This command starts a container named "alm" based on the "strealer/alm-app" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
+
+### Running Update, Install & Remove Scripts
+- To update configuration:
+  ```shell
+  docker exec -it alm update_conf
+  ```
+- To install Nginx:
+  ```shell
+  docker exec -it alm install_nginx
+  ```
+- To remove Nginx:
+  ```shell
+  docker exec -it alm remove_nginx
+  ```
+
+
+### Building and Running Java Program
+- To clean the project:
+ ```shell
+  docker exec -it alm mvn clean
+  ```
+- To package the project:
+ ```shell
+  docker exec -it alm mvn package
+  ```
+- To install the project:
+ ```shell
+  docker exec -it alm mvn install
+  ```
+- To run the Java program:
+ ```shell
+  docker exec -it alm java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
+  ```
