@@ -1,5 +1,5 @@
 # Specify Ubuntu as the base image
-FROM strealer/alm-dependencies
+FROM strealer/alm-dependencies:latest
 
 WORKDIR /alm
 
