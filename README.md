@@ -48,9 +48,9 @@ Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated 
 
 ## Docker Instructions
 
-### Clone the repo
+### Clone the repo & cd to it
 ```shell
-https://github.com/strealer/alm.git
+https://github.com/strealer/alm.git && cd alm
 ```
 
 ### Build the Image (Use it if you know what you're doing)
