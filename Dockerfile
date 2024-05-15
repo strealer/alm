@@ -1,5 +1,7 @@
 FROM ubuntu:latest
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update -y && apt-get upgrade -y \
         gawk \
         coreutils \
@@ -7,7 +9,9 @@ RUN apt-get update -y && apt-get upgrade -y \
         sed \
         nginx \
         openjdk-17-jdk \
-        maven
+        maven && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /alm
 
