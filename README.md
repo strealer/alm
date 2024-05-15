@@ -50,7 +50,7 @@ Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated 
 
 ### Build the Image (Use it if you know what you're doing)
 ```shell
-docker build -t strealer/alm-app .
+docker pull strealer/alm-app:latest
 ```
 
 ### Running the Image
