@@ -2,13 +2,14 @@ FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
         gawk \
         coreutils \
-        grep    \
+        grep \
         sed \
         nginx \
-        openjdk-17-jdk \
+        openjdk-17-jdk-headless \
         maven && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
