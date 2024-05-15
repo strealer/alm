@@ -7,5 +7,4 @@ RUN apt-get update -y && apt-get upgrade -y \
         sed \
         nginx \
         openjdk-17-jdk \
-        maven \
-        zsh
+        maven
