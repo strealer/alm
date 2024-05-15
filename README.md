@@ -48,9 +48,14 @@ Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated 
 
 ## Docker Instructions
 
+### Clone the repo
+```shell
+https://github.com/strealer/alm.git
+```
+
 ### Build the Image (Use it if you know what you're doing)
 ```shell
-docker pull strealer/alm-app:latest
+docker build -t strealer/alm-app .
 ```
 
 ### Running the Image
