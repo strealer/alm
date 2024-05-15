@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - 'Dockerfile.alm-dependencies'
+  workflow_dispatch:
 
 env:
   REGISTRY: docker.io
