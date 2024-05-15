@@ -2,11 +2,8 @@ name: Docker
 
 on:
   push:
-    paths:
-      - 'Dockerfile.alm-dependencies'
-  pull_request:
-    paths:
-      - 'Dockerfile.alm-dependencies'
+    branches:
+      - main
   workflow_dispatch:
 
 env:
