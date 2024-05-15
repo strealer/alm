@@ -9,5 +9,5 @@ RUN chmod +x /bin/update_conf /bin/install_nginx /bin/remove_nginx
 
 EXPOSE 80
 
-# The command to start Nginx when the container starts.
+# The command to start Nginx when the container starts
 CMD ["nginx", "-g", "daemon off;"]
