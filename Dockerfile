@@ -1,4 +1,13 @@
-FROM strealer/alm-dependencies:latest
+FROM ubuntu:latest
+
+RUN apt-get update -y && apt-get upgrade -y \
+        gawk \
+        coreutils \
+        grep    \
+        sed \
+        nginx \
+        openjdk-17-jdk \
+        maven
 
 WORKDIR /alm
 
