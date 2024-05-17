@@ -46,7 +46,7 @@ java -jar target/alm-1.0-SNAPSHOT.jar
 Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated snapshot JAR file in the target directory.
 
 
-## Docker - ARM64
+# Docker - ARM64
 
 ### Clone the repo & cd to it
 ```shell
@@ -92,7 +92,7 @@ This command starts a container named "alm_arm64" based on the "strealer/alm-app
   docker exec -it alm_arm64 java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
   ```
 
-## Docker - AMD64
+# Docker - AMD64
 
 ### Clone the repo & cd to it
 ```shell
