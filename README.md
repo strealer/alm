@@ -46,7 +46,7 @@ java -jar target/alm-1.0-SNAPSHOT.jar
 Make sure to replace alm-1.0-SNAPSHOT.jar with the actual name of the generated snapshot JAR file in the target directory.
 
 
-## Docker Instructions
+# Docker Instructions
 
 ### Clone the repo & cd to it
 ```shell
@@ -58,41 +58,84 @@ https://github.com/strealer/alm.git && cd alm
 docker build -t strealer/alm-app .
 ```
 
+## ARM64
+
 ### Running the Image
 ```shell
-docker-compose up -d
+docker-compose up -d arm64-latest
 ```
-This command starts a container named "alm" based on the "strealer/alm-app" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
+This command starts a container named "alm_arm64" based on the "strealer/alm-app:arm64-latest" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
 
 ### Running Update, Install & Remove Scripts
 - To update configuration:
   ```shell
-  docker exec -it alm update_conf
+  docker exec -it alm_arm64 update_conf
   ```
 - To install Nginx:
   ```shell
-  docker exec -it alm install_nginx
+  docker exec -it alm_arm64 install_nginx
   ```
 - To remove Nginx:
   ```shell
-  docker exec -it alm remove_nginx
+  docker exec -it alm_arm64 remove_nginx
   ```
 
 
 ### Building and Running Java Program
 - To clean the project:
  ```shell
-  docker exec -it alm mvn clean
+  docker exec -it alm_arm64 mvn clean
   ```
 - To package the project:
  ```shell
-  docker exec -it alm mvn package
+  docker exec -it alm_arm64 mvn package
   ```
 - To install the project:
  ```shell
-  docker exec -it alm mvn install
+  docker exec -it alm_arm64 mvn install
   ```
 - To run the Java program:
  ```shell
-  docker exec -it alm java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
+  docker exec -it alm_arm64 java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
+  ```
+
+## AMD64
+
+### Running the Image
+```shell
+docker-compose up -d amd64-latest
+```
+This command starts a container named "alm_amd64" based on the "strealer/alm-app:amd64-latest" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
+
+### Running Update, Install & Remove Scripts
+- To update configuration:
+  ```shell
+  docker exec -it alm_amd64 update_conf
+  ```
+- To install Nginx:
+  ```shell
+  docker exec -it alm_amd64 install_nginx
+  ```
+- To remove Nginx:
+  ```shell
+  docker exec -it alm_amd64 remove_nginx
+  ```
+
+
+### Building and Running Java Program
+- To clean the project:
+ ```shell
+  docker exec -it alm_amd64 mvn clean
+  ```
+- To package the project:
+ ```shell
+  docker exec -it alm_amd64 mvn package
+  ```
+- To install the project:
+ ```shell
+  docker exec -it alm_amd64 mvn install
+  ```
+- To run the Java program:
+ ```shell
+  docker exec -it alm_amd64 java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
   ```
