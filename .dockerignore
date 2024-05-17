@@ -1,4 +1,5 @@
-docker/
+Dockerfile
+docker-compose.yml
 puppet/
 README.md
 .git
