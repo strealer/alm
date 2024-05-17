@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   alm_arm64:
     image: strealer/alm-app:arm64-latest
