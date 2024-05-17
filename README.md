@@ -74,19 +74,7 @@ This command starts a container named "alm_arm64" based on the "strealer/alm-app
   ```
 
 
-### Building and Running Java Program
-- To clean the project:
- ```shell
-  docker exec -it alm_arm64 mvn clean
-  ```
-- To package the project:
- ```shell
-  docker exec -it alm_arm64 mvn package
-  ```
-- To install the project:
- ```shell
-  docker exec -it alm_arm64 mvn install
-  ```
+### Running Java Program
 - To run the Java program:
  ```shell
   docker exec -it alm_arm64 java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
@@ -120,19 +108,7 @@ This command starts a container named "alm_amd64" based on the "strealer/alm-app
   ```
 
 
-### Building and Running Java Program
-- To clean the project:
- ```shell
-  docker exec -it alm_amd64 mvn clean
-  ```
-- To package the project:
- ```shell
-  docker exec -it alm_amd64 mvn package
-  ```
-- To install the project:
- ```shell
-  docker exec -it alm_amd64 mvn install
-  ```
+### Running Java Program
 - To run the Java program:
  ```shell
   docker exec -it alm_amd64 java -jar target/strealer-cache-manager-1.0-SNAPSHOT.jar
