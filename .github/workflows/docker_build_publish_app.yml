@@ -60,8 +60,7 @@ jobs:
 
       - name: Generate timestamp
         id: timestamp
-        run: |
-          echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         id: build-and-push
