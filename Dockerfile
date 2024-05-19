@@ -30,9 +30,8 @@ RUN mvn package
 RUN mvn install
 
 # Stage 3: Create the final image
-FROM ubuntu:22.04
+FROM base
 
-COPY --from=base /usr/local /usr/local
 COPY --from=builder /alm /alm
 COPY --from=builder /bin/update_conf /bin/update_conf
 COPY --from=builder /bin/install_nginx /bin/install_nginx
