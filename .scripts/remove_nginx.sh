@@ -4,7 +4,7 @@
 sudo systemctl stop nginx
 
 # Remove Nginx package
-sudo apt-get purge nginx nginx-common nginx-core -y
+#sudo apt-get purge nginx nginx-common nginx-core -y
 sudo apt-get autoremove -y
 sudo apt-get autoclean
 
