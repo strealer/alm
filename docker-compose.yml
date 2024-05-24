@@ -1,8 +1,20 @@
-version: '3.8'
-
 services:
-  alm:
-    image: strealer/alm-app
+  alm_arm64:
+    image: strealer/alm-app:arm64-latest
     ports:
       - "8080:80"
-    container_name: alm
+    container_name: alm_arm64
+    deploy:
+      placement:
+        constraints:
+          - node.platform.arch == arm64
+
+  alm_amd64:
+    image: strealer/alm-app:amd64-latest
+    ports:
+      - "8080:80"
+    container_name: alm_amd64
+    deploy:
+      placement:
+        constraints:
+          - node.platform.arch == amd64
