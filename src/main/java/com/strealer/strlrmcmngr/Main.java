@@ -20,7 +20,7 @@ public class Main {
     private static String CONFIG_FILE_DEFAULT_PATH = "/target/strlrmcmngr.cnf";
     // Define error container
     private static List<Integer> errorCodeSet = new ArrayList<>();
-    // Declare Configuration object as global
+    // Declare Configuration object as globalp
     private static Configuration config;
     // Define timers
     private static Timer varnishCheckTimer;
@@ -150,29 +150,24 @@ public class Main {
         @Override
         public void run() {
             int nginxRestartTryMaxCount = config.getNginxRestartTryMaxCount();
-            try {
-                while (!NginxStatusChecker.isNginxRunning() && restartTryCount < nginxRestartTryMaxCount) {
-                    try {
-                        nginxService.restartNginx();
-                        if (!NginxStatusChecker.isNginxRunning()) {
-                            restartTryCount++;
-                        } else {
-                            removeErrorCode(2);
-                            restartTryCount = 0;
-                        }
-                    } catch (IOException | InterruptedException e) {
+            while (!NginxStatusChecker.isNginxRunning() && restartTryCount < nginxRestartTryMaxCount) {
+                try {
+                    nginxService.restartNginx();
+                    if (!NginxStatusChecker.isNginxRunning()) {
                         restartTryCount++;
-                        e.printStackTrace();
-                    }
-                    if (restartTryCount >= nginxRestartTryMaxCount) {
-                        storeErrorCode(2);
+                    } else {
+                        removeErrorCode(2);
                         restartTryCount = 0;
-                        break;
                     }
+                } catch (IOException | InterruptedException e) {
+                    restartTryCount++;
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                restartTryCount++;
-                e.printStackTrace();
+                if (restartTryCount >= nginxRestartTryMaxCount) {
+                    storeErrorCode(2);
+                    restartTryCount = 0;
+                    break;
+                }
             }
             if (restartTryCount >= nginxRestartTryMaxCount) {
                 storeErrorCode(2);
