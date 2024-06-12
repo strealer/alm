@@ -5,6 +5,13 @@ PUPPET_DEB="puppet7-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppet-agent"
 
+# Check if wget is installed, and install it if not
+if ! command -v wget &> /dev/null; then
+  echo "wget could not be found, installing it..."
+  sudo apt-get update
+  sudo apt-get install -y wget
+fi
+
 # Download the Puppet release package if it doesn't exist
 if [ ! -f "$PUPPET_DEB" ]; then
   wget "$PUPPET_URL"
