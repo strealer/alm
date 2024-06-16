@@ -39,13 +39,23 @@ if [ -f "$PUPPET_DEB" ]; then
   rm "$PUPPET_DEB"
 fi
 
-# Add /opt/puppetlabs/bin/ to PATH globally if not already added
-if [ ! -f "$PROFILE_FILE" ] || ! path_exists_in_profile "$PATH_TO_ADD"; then
-  echo 'export PATH="/opt/puppetlabs/bin:$PATH"' | sudo tee "$PROFILE_FILE"
+# Ensure /etc/profile.d/puppetlabs.sh exists and add /opt/puppetlabs/bin/ to PATH globally if not already added
+if [ ! -f "$PROFILE_FILE" ]; then
+  sudo touch "$PROFILE_FILE"
+  sudo chmod 644 "$PROFILE_FILE"
+  echo "Created $PROFILE_FILE"
+fi
+
+if ! path_exists_in_profile "$PATH_TO_ADD"; then
+  echo 'export PATH="/opt/puppetlabs/bin:$PATH"' | sudo tee -a "$PROFILE_FILE"
   echo "Added /opt/puppetlabs/bin/ to \$PATH globally in $PROFILE_FILE"
 else
   echo "$PATH_TO_ADD already exists in $PROFILE_FILE. Skipping addition."
 fi
+
+# Source the profile file to apply changes immediately
+source "$PROFILE_FILE"
+echo "Sourced $PROFILE_FILE to apply changes."
 
 
 ## Docker
