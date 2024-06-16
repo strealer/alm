@@ -5,6 +5,7 @@ PUPPET_DEB="puppet7-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppet-agent"
 
+## Puppet
 # Check if wget is installed, and install it if not
 if ! command -v wget &> /dev/null; then
   echo "wget could not be found, installing it..."
@@ -31,6 +32,14 @@ if [ -f "$PUPPET_DEB" ]; then
   rm "$PUPPET_DEB"
 fi
 
+# Add /opt/puppetlabs/bin/ to PATH if not already added
+if [[ ":$PATH:" != *":/opt/puppetlabs/bin:"* ]]; then
+  echo 'export PATH="/opt/puppetlabs/bin:$PATH"' >> ~/.bashrc
+  export PATH="/opt/puppetlabs/bin:$PATH"
+fi
+
+
+## Docker
 # Remove existing Docker packages
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
   if dpkg -s "$pkg" &> /dev/null; then
@@ -60,5 +69,6 @@ fi
 if ! dpkg -s docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &> /dev/null; then
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 fi
+
 
 echo "Puppet and Docker installation script completed successfully."
