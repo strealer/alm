@@ -4,12 +4,12 @@
 PUPPET_DEB="puppet7-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppetserver"
-BASHRC_FILE="$HOME/.bashrc"
+PROFILE_FILE="/etc/profile.d/puppetlabs.sh"
 PATH_TO_ADD="/opt/puppetlabs/bin"
 
-# Function to check if a path exists in ~/.bashrc
-path_exists_in_bashrc() {
-  grep -qF "$1" "$BASHRC_FILE"
+# Function to check if a path exists in /etc/profile.d/puppetlabs.sh
+path_exists_in_profile() {
+  grep -qF "$1" "$PROFILE_FILE"
 }
 
 ## Puppet
@@ -39,14 +39,23 @@ if [ -f "$PUPPET_DEB" ]; then
   rm "$PUPPET_DEB"
 fi
 
-# Add /opt/puppetlabs/bin/ to PATH if not already added
-if ! path_exists_in_bashrc "$PATH_TO_ADD"; then
-  echo 'export PATH="/opt/puppetlabs/bin:$PATH"' >> "$BASHRC_FILE"
-  export PATH="/opt/puppetlabs/bin:$PATH"
-  echo "Added /opt/puppetlabs/bin/ to \$PATH in $BASHRC_FILE"
-else
-  echo "$PATH_TO_ADD already exists in $BASHRC_FILE. Skipping addition."
+# Ensure /etc/profile.d/puppetlabs.sh exists and add /opt/puppetlabs/bin/ to PATH globally if not already added
+if [ ! -f "$PROFILE_FILE" ]; then
+  sudo touch "$PROFILE_FILE"
+  sudo chmod 644 "$PROFILE_FILE"
+  echo "Created $PROFILE_FILE"
 fi
+
+if ! path_exists_in_profile "$PATH_TO_ADD"; then
+  echo 'export PATH="/opt/puppetlabs/bin:$PATH"' | sudo tee -a "$PROFILE_FILE"
+  echo "Added /opt/puppetlabs/bin/ to \$PATH globally in $PROFILE_FILE"
+else
+  echo "$PATH_TO_ADD already exists in $PROFILE_FILE. Skipping addition."
+fi
+
+# Source the profile file to apply changes immediately
+source "$PROFILE_FILE"
+echo "Sourced $PROFILE_FILE to apply changes."
 
 
 ## Docker
