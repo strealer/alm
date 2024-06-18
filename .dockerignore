@@ -1,7 +1,10 @@
 Dockerfile
 docker-compose.yml
+main.tf
 puppet/
 README.md
+.deployment/
 .git
 .gitignore
 .github/
+.puppet/
