@@ -94,7 +94,7 @@ set_hostname() {
   PREFIX="COMP"
 
   # Generate hostname
-  HOSTNAME="${PREFIX}_${UUID}_${DATE}"
+  HOSTNAME="${PREFIX}-${UUID}-${DATE}"
 
   # Save to file
   echo "$HOSTNAME" > "$HOSTNAME_FILE"
