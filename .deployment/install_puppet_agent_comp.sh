@@ -11,7 +11,7 @@ PATH_TO_ADD="/opt/puppetlabs/bin"
 
 HOSTNAME_FILE="/etc/hostname"
 UUID_FILE="/etc/node_uuid"
-COMPANY_NODES_DIR="/etc/company_nodes"
+COMPANY_NODES_DIR="/etc/company_nodes" # Adjusted for company nodes
 
 PUPPET_MASTER_IP="34.122.226.249"
 HOSTS_FILE="/etc/hosts"
