@@ -10,7 +10,7 @@ PATH_TO_ADD="/opt/puppetlabs/bin"
 
 HOSTNAME_FILE="/etc/hostname"
 UUID_FILE="/etc/node_uuid"
-USER_NODES_DIR="/etc/user_nodes"
+USER_NODES_DIR="/etc/user_nodes"  # Adjusted for user nodes
 
 PUPPET_MASTER_IP="34.122.226.249"
 HOSTS_FILE="/etc/hosts"
@@ -73,9 +73,9 @@ install_puppet() {
 
 # Function to set hostname
 set_hostname() {
-  # Check if hostname already exists with USER pattern
+  # Check if hostname already exists with USR pattern
   current_hostname=$(hostname)
-  if [[ "$current_hostname" == USER-* ]]; then
+  if [[ "$current_hostname" == USR-* ]]; then
     echo "Hostname already set to: $current_hostname"
     return
   fi
@@ -89,7 +89,7 @@ set_hostname() {
   fi
 
   DATE=$(date +%Y%m%d)
-  PREFIX="USER"
+  PREFIX="USR"
 
   # Generate hostname
   HOSTNAME="${PREFIX}_${UUID}_${DATE}"
