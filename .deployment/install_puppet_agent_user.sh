@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Variables
+### Variables
+
 PUPPET_DEB="puppet7-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppet-agent"
@@ -16,6 +17,7 @@ PUPPET_MASTER_IP="34.122.226.249"
 HOSTS_FILE="/etc/hosts"
 PUPPET_CONF_FILE="/etc/puppetlabs/puppet/puppet.conf"
 HOSTNAME_ENTRY="puppet-master"
+
 
 ### Function Definitions
 
@@ -207,6 +209,7 @@ install_docker() {
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   fi
 }
+
 
 ### Main Script Execution
 
