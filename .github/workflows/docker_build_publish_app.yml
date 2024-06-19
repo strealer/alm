@@ -5,9 +5,11 @@ on:
     branches:
       - main
     paths-ignore:
+      - 'main.tf'
       - 'README.md'
       - 'docker-compose.yml'
       - '.deployment'
+      - '.puppet'
   workflow_dispatch:
 
 env:
