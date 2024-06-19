@@ -8,8 +8,8 @@ on:
       - 'main.tf'
       - 'README.md'
       - 'docker-compose.yml'
-      - '.deployment'
-      - '.puppet'
+      - '.deployment/**'
+      - '.puppet/**'
   workflow_dispatch:
 
 env:
