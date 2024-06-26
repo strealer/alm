@@ -7,8 +7,10 @@ PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppetserver"
 PROFILE_FILE="/etc/profile.d/puppetlabs.sh"
 PATH_TO_ADD="/opt/puppetlabs/bin"
-DESIRED_HOSTNAME="puppet-master"
+DESIRED_HOSTNAME="puppet.strealer.io"
 HOSTS_FILE="/etc/hosts"
+PUPPET_CONF_FILE="/etc/puppetlabs/puppet/puppet.conf"
+HOSTNAME_ENTRY="puppet.strealer.io"
 PROFILE_FILE="/etc/profile.d/puppetlabs.sh"
 PATH_TO_ADD="/opt/puppetlabs/bin"
 
@@ -88,6 +90,39 @@ update_hosts_file() {
   fi
 }
 
+# Function to update puppet.conf
+update_puppet_conf() {
+  if grep -q "^\[main\]" "$PUPPET_CONF_FILE"; then
+    # Check if the current server entry is correct after [main]
+    if grep -A 1 "^\[main\]" "$PUPPET_CONF_FILE" | grep -q "server"; then
+      current_server=$(grep -A 1 "^\[main\]" "$PUPPET_CONF_FILE" | grep "server" | awk -F "=" '{print $2}' | xargs)
+      if [ "$current_server" != "$HOSTNAME_ENTRY" ]; then
+        # Update the server entry
+        sudo sed -i "/^\[main\]/,/^[^[]/ s/^server.*/server = $HOSTNAME_ENTRY/" "$PUPPET_CONF_FILE"
+        echo "Corrected the server entry in $PUPPET_CONF_FILE"
+      else
+        echo "The server entry in $PUPPET_CONF_FILE is already correct"
+      fi
+    else
+      # Add the server entry immediately after [main]
+      sudo sed -i "/^\[main\]/a server = $HOSTNAME_ENTRY" "$PUPPET_CONF_FILE"
+      echo "Added server entry to [main] section in $PUPPET_CONF_FILE"
+    fi
+  else
+    # Add [main] and server entry at the appropriate place
+    if grep -q "^[[:space:]]*#" "$PUPPET_CONF_FILE"; then
+      # Find the last line of comments and insert after
+      last_comment_line=$(grep -n "^[[:space:]]*#" "$PUPPET_CONF_FILE" | tail -n 1 | cut -d: -f1)
+      sudo sed -i "$last_comment_line a \\\n[main]\nserver = $HOSTNAME_ENTRY\n" "$PUPPET_CONF_FILE"
+      echo "Added [main] section and server entry after comments in $PUPPET_CONF_FILE"
+    else
+      # Add the [main] section and server entry at the beginning
+      (echo -e "[main]\nserver = $HOSTNAME_ENTRY\n"; cat "$PUPPET_CONF_FILE") | sudo tee "$PUPPET_CONF_FILE" > /dev/null
+      echo "Added [main] section and server entry at the beginning of $PUPPET_CONF_FILE"
+    fi
+  fi
+}
+
 # Function to ensure Puppet server service is started and enabled
 ensure_puppetserver_service() {
   if ! sudo systemctl is-active --quiet puppetserver; then
@@ -112,6 +147,7 @@ main() {
   install_puppet_server
   set_hostname
   update_hosts_file
+  update_puppet_conf
   ensure_puppetserver_service
   echo "Puppet Server installation & configuration script completed successfully."
 }
