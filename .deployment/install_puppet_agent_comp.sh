@@ -1,7 +1,6 @@
 #!/bin/bash
 
-### Variables
-
+# Variables
 PUPPET_DEB="puppet7-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppet-agent"
@@ -11,13 +10,12 @@ PATH_TO_ADD="/opt/puppetlabs/bin"
 
 HOSTNAME_FILE="/etc/hostname"
 UUID_FILE="/etc/node_uuid"
-COMPANY_NODES_DIR="/etc/company_nodes" # Adjusted for company nodes
+COMPANY_NODES_DIR="/etc/company_nodes"
 
-PUPPET_MASTER_IP="34.122.226.249"
+PUPPET_MASTER_IP="puppet.strealer.io"
 HOSTS_FILE="/etc/hosts"
 PUPPET_CONF_FILE="/etc/puppetlabs/puppet/puppet.conf"
-HOSTNAME_ENTRY="puppet-master"
-
+HOSTNAME_ENTRY="puppet.strealer.io"
 
 ### Function Definitions
 
@@ -175,6 +173,10 @@ ensure_puppet_service() {
   else
     echo "Puppet service is already enabled"
   fi
+
+  # Restart Puppet service
+  sudo systemctl restart puppet
+  echo "Restarted Puppet service"
 }
 
 # Function to install Docker
@@ -209,7 +211,6 @@ install_docker() {
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   fi
 }
-
 
 ### Main Script Execution
 
