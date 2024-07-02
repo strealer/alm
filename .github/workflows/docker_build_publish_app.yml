@@ -3,7 +3,9 @@ name: Docker
 on:
   push:
     branches:
-      - main
+      - development
+      - staging
+      - production
     paths-ignore:
       - 'main.tf'
       - 'README.md'
