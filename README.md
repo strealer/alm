@@ -96,7 +96,7 @@ This command starts a container named "alm_amd64" based on the "strealer/alm-app
 ### Running Update, Install & Remove Scripts
 - To update configuration:
   ```bash
-  docker exec -it alm_arm64 update_conf --backend-host "example.com" --device-id "12345" --remote-api-url "https://api.example.com" --remote-api-key "abcdefg123456"
+  docker exec -it alm_amd64 update_conf --backend-host "example.com" --device-id "12345" --remote-api-url "https://api.example.com" --remote-api-key "abcdefg123456"
   ```
 - To install Nginx:
   ```bash
