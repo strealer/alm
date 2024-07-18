@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PUPPET_DEB="puppet7-release-jammy.deb"
+PUPPET_DEB="puppet8-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppet-agent"
 
@@ -12,10 +12,8 @@ HOSTNAME_FILE="/etc/hostname"
 UUID_FILE="/etc/node_uuid"
 USER_NODES_DIR="/etc/user_nodes"  # Adjusted for user nodes
 
-PUPPET_MASTER_IP="puppet.strealer.io"
-HOSTS_FILE="/etc/hosts"
+PUPPET_MASTER="puppet.strealer.io"
 PUPPET_CONF_FILE="/etc/puppetlabs/puppet/puppet.conf"
-HOSTNAME_ENTRY="puppet.strealer.io"
 
 ### Function Definitions
 
@@ -73,9 +71,9 @@ install_puppet() {
 
 # Function to set hostname
 set_hostname() {
-  # Check if hostname already exists with USR pattern
+  # Check if hostname already exists with usr pattern
   current_hostname=$(hostname)
-  if [[ "$current_hostname" == USR-* ]]; then
+  if [[ "$current_hostname" == usr-* ]]; then
     echo "Hostname already set to: $current_hostname"
     return
   fi
@@ -89,7 +87,7 @@ set_hostname() {
   fi
 
   DATE=$(date +%Y%m%d)
-  PREFIX="USR"
+  PREFIX="usr"
 
   # Generate hostname
   HOSTNAME="${PREFIX}-${UUID}-${DATE}"
@@ -105,42 +103,25 @@ set_hostname() {
   echo "Hostname set to: $HOSTNAME"
 }
 
-# Function to update /etc/hosts
-update_hosts_file() {
-  if grep -q "$HOSTNAME_ENTRY" "$HOSTS_FILE"; then
-    # Check if the current IP is correct
-    current_ip=$(grep "$HOSTNAME_ENTRY" "$HOSTS_FILE" | awk '{print $1}')
-    if [ "$current_ip" != "$PUPPET_MASTER_IP" ]; then
-      # Update the IP
-      sudo sed -i "/$HOSTNAME_ENTRY/d" "$HOSTS_FILE"
-      echo "$PUPPET_MASTER_IP $HOSTNAME_ENTRY" | sudo tee -a "$HOSTS_FILE" > /dev/null
-      echo "Corrected the IP address for $HOSTNAME_ENTRY in /etc/hosts"
-    else
-      echo "The IP address for $HOSTNAME_ENTRY is already correct"
-    fi
-  else
-    # Add the entry if it doesn't exist
-    echo "$PUPPET_MASTER_IP $HOSTNAME_ENTRY" | sudo tee -a "$HOSTS_FILE" > /dev/null
-    echo "Added $PUPPET_MASTER_IP $HOSTNAME_ENTRY to /etc/hosts"
-  fi
-}
-
 # Function to update puppet.conf
 update_puppet_conf() {
+  HOSTNAME=$(hostname)
+  WAIT_FOR_CERT=60
+
   if grep -q "^\[main\]" "$PUPPET_CONF_FILE"; then
     # Check if the current server entry is correct after [main]
     if grep -A 1 "^\[main\]" "$PUPPET_CONF_FILE" | grep -q "server"; then
       current_server=$(grep -A 1 "^\[main\]" "$PUPPET_CONF_FILE" | grep "server" | awk -F "=" '{print $2}' | xargs)
-      if [ "$current_server" != "$HOSTNAME_ENTRY" ]; then
+      if [ "$current_server" != "$PUPPET_MASTER" ]; then
         # Update the server entry
-        sudo sed -i "/^\[main\]/,/^[^[]/ s/^server.*/server = $HOSTNAME_ENTRY/" "$PUPPET_CONF_FILE"
+        sudo sed -i "/^\[main\]/,/^[^[]/ s/^server.*/server = $PUPPET_MASTER/" "$PUPPET_CONF_FILE"
         echo "Corrected the server entry in $PUPPET_CONF_FILE"
       else
         echo "The server entry in $PUPPET_CONF_FILE is already correct"
       fi
     else
       # Add the server entry immediately after [main]
-      sudo sed -i "/^\[main\]/a server = $HOSTNAME_ENTRY" "$PUPPET_CONF_FILE"
+      sudo sed -i "/^\[main\]/a server = $PUPPET_MASTER" "$PUPPET_CONF_FILE"
       echo "Added server entry to [main] section in $PUPPET_CONF_FILE"
     fi
   else
@@ -148,12 +129,57 @@ update_puppet_conf() {
     if grep -q "^[[:space:]]*#" "$PUPPET_CONF_FILE"; then
       # Find the last line of comments and insert after
       last_comment_line=$(grep -n "^[[:space:]]*#" "$PUPPET_CONF_FILE" | tail -n 1 | cut -d: -f1)
-      sudo sed -i "$last_comment_line a \\\n[main]\nserver = $HOSTNAME_ENTRY\n" "$PUPPET_CONF_FILE"
+      sudo sed -i "$last_comment_line a \\\n[main]\nserver = $PUPPET_MASTER\n" "$PUPPET_CONF_FILE"
       echo "Added [main] section and server entry after comments in $PUPPET_CONF_FILE"
     else
       # Add the [main] section and server entry at the beginning
-      (echo -e "[main]\nserver = $HOSTNAME_ENTRY\n"; cat "$PUPPET_CONF_FILE") | sudo tee "$PUPPET_CONF_FILE" > /dev/null
+      (echo -e "[main]\nserver = $PUPPET_MASTER\n"; cat "$PUPPET_CONF_FILE") | sudo tee "$PUPPET_CONF_FILE" > /dev/null
       echo "Added [main] section and server entry at the beginning of $PUPPET_CONF_FILE"
+    fi
+  fi
+
+  if grep -q "^\[agent\]" "$PUPPET_CONF_FILE"; then
+    # Check if the current certname entry is correct after [agent]
+    if grep -A 1 "^\[agent\]" "$PUPPET_CONF_FILE" | grep -q "certname"; then
+      current_certname=$(grep -A 1 "^\[agent\]" "$PUPPET_CONF_FILE" | grep "certname" | awk -F "=" '{print $2}' | xargs)
+      if [ "$current_certname" != "$HOSTNAME" ]; then
+        # Update the certname entry
+        sudo sed -i "/^\[agent\]/,/^[^[]/ s/^certname.*/certname = $HOSTNAME/" "$PUPPET_CONF_FILE"
+        echo "Corrected the certname entry in $PUPPET_CONF_FILE"
+      else
+        echo "The certname entry in $PUPPET_CONF_FILE is already correct"
+      fi
+    else
+      # Add the certname entry immediately after [agent]
+      sudo sed -i "/^\[agent\]/a certname = $HOSTNAME" "$PUPPET_CONF_FILE"
+      echo "Added certname entry to [agent] section in $PUPPET_CONF_FILE"
+    fi
+    # Check if the waitforcert entry is correct after [agent]
+    if grep -A 1 "^\[agent\]" "$PUPPET_CONF_FILE" | grep -q "waitforcert"; then
+      current_waitforcert=$(grep -A 1 "^\[agent\]" "$PUPPET_CONF_FILE" | grep "waitforcert" | awk -F "=" '{print $2}' | xargs)
+      if [ "$current_waitforcert" != "$WAIT_FOR_CERT" ]; then
+        # Update the waitforcert entry
+        sudo sed -i "/^\[agent\]/,/^[^[]/ s/^waitforcert.*/waitforcert = $WAIT_FOR_CERT/" "$PUPPET_CONF_FILE"
+        echo "Corrected the waitforcert entry in $PUPPET_CONF_FILE"
+      else
+        echo "The waitforcert entry in $PUPPET_CONF_FILE is already correct"
+      fi
+    else
+      # Add the waitforcert entry immediately after [agent]
+      sudo sed -i "/^\[agent\]/a waitforcert = $WAIT_FOR_CERT" "$PUPPET_CONF_FILE"
+      echo "Added waitforcert entry to [agent] section in $PUPPET_CONF_FILE"
+    fi
+  else
+    # Add [agent] section and its entries
+    if grep -q "^[[:space:]]*#" "$PUPPET_CONF_FILE"; then
+      # Find the last line of comments and insert after
+      last_comment_line=$(grep -n "^[[:space:]]*#" "$PUPPET_CONF_FILE" | tail -n 1 | cut -d: -f1)
+      sudo sed -i "$last_comment_line a \\\n[agent]\ncertname = $HOSTNAME\nwaitforcert = $WAIT_FOR_CERT\n" "$PUPPET_CONF_FILE"
+      echo "Added [agent] section and its entries after comments in $PUPPET_CONF_FILE"
+    else
+      # Add the [agent] section and its entries at the end
+      echo -e "\n[agent]\ncertname = $HOSTNAME\nwaitforcert = $WAIT_FOR_CERT" | sudo tee -a "$PUPPET_CONF_FILE" > /dev/null
+      echo "Added [agent] section and its entries at the end of $PUPPET_CONF_FILE"
     fi
   fi
 }
@@ -212,12 +238,12 @@ install_docker() {
   fi
 }
 
+
 ### Main Script Execution
 
 main() {
   install_puppet
   set_hostname
-  update_hosts_file
   update_puppet_conf
   ensure_puppet_service
   install_docker
