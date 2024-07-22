@@ -1,6 +1,6 @@
 ---
 - name: Install and Configure Puppet Server
-  hosts: puppet
+  hosts: puppetserver
   become: true
   vars:
     puppet_deb: "puppet8-release-jammy.deb"
