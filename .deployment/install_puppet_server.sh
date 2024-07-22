@@ -2,7 +2,7 @@
 
 ### Variables
 
-PUPPET_DEB="puppet7-release-jammy.deb"
+PUPPET_DEB="puppet8-release-jammy.deb"
 PUPPET_URL="https://apt.puppet.com/$PUPPET_DEB"
 PUPPET_PACKAGE="puppetserver"
 PROFILE_FILE="/etc/profile.d/puppetlabs.sh"
@@ -123,6 +123,20 @@ update_puppet_conf() {
   fi
 }
 
+# Function to update autosign.conf
+update_autosign_conf() {
+  AUTOSIGN_CONF_FILE="/etc/puppetlabs/puppet/autosign.conf"
+  AUTOSIGN_ENTRIES="comp-*\nusr-*"
+
+  # Check if the autosign entries already exist
+  for entry in $(echo -e "$AUTOSIGN_ENTRIES"); do
+    if ! grep -q "$entry" "$AUTOSIGN_CONF_FILE"; then
+      echo "$entry" | sudo tee -a "$AUTOSIGN_CONF_FILE" > /dev/null
+      echo "Added $entry to $AUTOSIGN_CONF_FILE"
+    fi
+  done
+}
+
 # Function to ensure Puppet server service is started and enabled
 ensure_puppetserver_service() {
   if ! sudo systemctl is-active --quiet puppetserver; then
@@ -148,6 +162,7 @@ main() {
   set_hostname
   update_hosts_file
   update_puppet_conf
+  update_autosign_conf
   ensure_puppetserver_service
   echo "Puppet Server installation & configuration script completed successfully."
 }
