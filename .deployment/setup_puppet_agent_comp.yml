@@ -82,13 +82,23 @@
         line: "127.0.0.1 {{ desired_hostname }}"
         state: present
 
-    - name: Update puppet.conf
+    - name: Ensure puppet.conf has required content
       blockinfile:
         path: "{{ puppet_conf_file }}"
         block: |
           [main]
           server = {{ hostname_entry }}
+
+          [server]
+          vardir = /opt/puppetlabs/server/data/puppetserver
+          logdir = /var/log/puppetlabs/puppetserver
+          rundir = /var/run/puppetlabs/puppetserver
+          pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+          codedir = /etc/puppetlabs/code
+          autosign = true
         create: yes
+        state: present
+        insertbefore: EOF
 
     - name: Update autosign.conf
       blockinfile:
