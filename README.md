@@ -55,7 +55,7 @@ git clone https://github.com/strealer/alm.git && cd alm
 
 ### Running the Image
 ```bash
-docker-compose up alm_arm64
+docker-compose up -d alm_arm64
 ```
 This command starts a container named "alm_arm64" based on the "strealer/alm-app:arm64-latest" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
 
@@ -89,7 +89,7 @@ git clone https://github.com/strealer/alm.git && cd alm
 
 ### Running the Image
 ```bash
-docker-compose up alm_amd64
+docker-compose up -d alm_amd64
 ```
 This command starts a container named "alm_amd64" based on the "strealer/alm-app:amd64-latest" image, mapping port 8080 on the host to port 80 in the container. The container runs in detached mode (`-d`).
 
