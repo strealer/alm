@@ -1,0 +1,120 @@
+---
+- name: Install and Configure Puppet Server
+  hosts: puppetserver
+  become: true
+  vars:
+    puppet_deb: "puppet8-release-jammy.deb"
+    puppet_url: "https://apt.puppet.com/puppet8-release-jammy.deb"
+    puppet_package: "puppetserver"
+    profile_file: "/etc/profile.d/puppetlabs.sh"
+    path_to_add: "/opt/puppetlabs/bin"
+    desired_hostname: "puppet.strealer.io"
+    hosts_file: "/etc/hosts"
+    puppet_conf_file: "/etc/puppetlabs/puppet/puppet.conf"
+    hostname_entry: "puppet.strealer.io"
+    autosign_conf_file: "/etc/puppetlabs/puppet/autosign.conf"
+    autosign_entries:
+      - "comp-*"
+      - "usr-*"
+
+  pre_tasks:
+    - name: Check if Puppet server is installed
+      stat:
+        path: "/etc/puppetlabs/puppet/puppet.conf"
+      register: puppet_conf_check
+
+    - name: Set fact for Puppet server installation
+      set_fact:
+        puppetserver_installed: "{{ puppet_conf_check.stat.exists }}"
+
+  tasks:
+    - name: Ensure wget is installed
+      apt:
+        name: wget
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Download Puppet release package
+      get_url:
+        url: "{{ puppet_url }}"
+        dest: "/tmp/{{ puppet_deb }}"
+      when: not puppetserver_installed
+
+    - name: Install Puppet release package
+      apt:
+        deb: "/tmp/{{ puppet_deb }}"
+      when: not puppetserver_installed
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Puppet server package
+      apt:
+        name: "{{ puppet_package }}"
+        state: present
+
+    - name: Remove Puppet release package
+      file:
+        path: "/tmp/{{ puppet_deb }}"
+        state: absent
+
+    - name: Ensure profile file exists
+      file:
+        path: "{{ profile_file }}"
+        state: touch
+        mode: '0644'
+
+    - name: Add Puppet labs bin to PATH if not already present
+      lineinfile:
+        path: "{{ profile_file }}"
+        line: 'export PATH="/opt/puppetlabs/bin:$PATH"'
+        state: present
+        create: yes
+
+    - name: Set hostname
+      hostname:
+        name: "{{ desired_hostname }}"
+
+    - name: Update /etc/hosts
+      lineinfile:
+        path: "{{ hosts_file }}"
+        line: "127.0.0.1 {{ desired_hostname }}"
+        state: present
+
+    - name: Ensure puppet.conf has required content
+      blockinfile:
+        path: "{{ puppet_conf_file }}"
+        block: |
+          [main]
+          server = {{ hostname_entry }}
+
+          [server]
+          vardir = /opt/puppetlabs/server/data/puppetserver
+          logdir = /var/log/puppetlabs/puppetserver
+          rundir = /var/run/puppetlabs/puppetserver
+          pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+          codedir = /etc/puppetlabs/code
+          autosign = true
+        create: yes
+        state: present
+        insertbefore: EOF
+
+    - name: Update autosign.conf
+      blockinfile:
+        path: "{{ autosign_conf_file }}"
+        block: |
+          {% for entry in autosign_entries %}
+          {{ entry }}
+          {% endfor %}
+        create: yes
+
+    - name: Ensure puppetserver service is started
+      service:
+        name: puppetserver
+        state: started
+
+    - name: Ensure puppetserver service is enabled
+      service:
+        name: puppetserver
+        enabled: yes

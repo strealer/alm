@@ -19,11 +19,14 @@
 *.tar.gz
 *.rar
 
-# Terraform
-.terraform
-.terraform.lock.hcl
-terraform.tfstate
+# Terraform files to ignore
+.terraform/
+*.tfstate
+*.tfstate.backup
 terraform.tfstate.backup
+terraform.tfstate
+terraform.tfvars
+.terraform.lock.hcl
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

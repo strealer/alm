@@ -2,7 +2,7 @@
 # For information about validating this Terraform code, see https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/google-cloud-platform-build#format-and-validate-the-configuration
 
 provider "google" {
-  credentials = file("~/.config/gcloud/application_default_credentials.json")
+#  credentials = file("~/.config/gcloud/application_default_credentials.json")
   project     = "effective-pipe-424209-r1"
   region      = "us-central1"  # Replace with your preferred region
 }
